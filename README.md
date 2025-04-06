@@ -143,3 +143,32 @@ Acest proiect reprezintă o placă electronică (e-board) customizată, proiecta
 3. Update firmware (DFU mode)
 
 #### 4.2 Conector Qwiic
+**Aplicații:**
+- Conectare senzori adiționali
+- Debug I²C bus
+- Extensii custom
+
+## 🔌 Mapare Pinuri ESP32-C6
+
+| Pin ESP32-C6 | Componentă / Semnal | Motivul Alegerii |
+|--------------|----------------------|------------------|
+| **GPIO1 (SDA)** | Magistrală I²C (BME680, MAX17048, DS3231) | Permite comunicarea simultană cu multiple dispozitive prin protocol standard |
+| **GPIO2 (SCL)** | Semnal de sincronizare I²C | Asigură temporizarea corectă a transferurilor pe magistrala shared I²C |
+| **GPIO5** | SPI MISO (E-Paper) | Facilitatează recepția datelor de stare de la display |
+| **GPIO6** | SPI MOSI (E-Paper) | Canal dedicat pentru transmiterea imaginilor către ecran |
+| **GPIO7** | SPI CLK (E-Paper) | Generează semnalul de ceas pentru sincronizarea datelor SPI |
+| **GPIO8** | SPI CS (E-Paper) | Selectează exclusiv display-ul în configurații multi-slave |
+| **GPIO9** | E-Paper DC | Determină dacă transferul conține date sau comenzi |
+| **GPIO10** | E-Paper RST | Permite resetarea hardware a display-ului în caz de eroare |
+| **GPIO11** | E-Paper BUSY | Monitorizează starea de ocupat pentru sincronizare fără polling |
+| **GPIO12** | BUTTON_BOOT | Configurat special pentru intrare în modul de programare |
+| **GPIO13** | BUTTON_RESET | Asigură resetarea controlată a sistemului |
+| **GPIO14** | BUTTON_USER | Permite interacțiunea utilizatorului cu meniul principal |
+| **GPIO15** | MAX17048 ALERT | Semnalează stări critice ale bateriei prin interrupt |
+| **GPIO16** | USB D+ | Implementare directă a fizicului USB conform specificației |
+| **GPIO17** | USB D- | Pereche diferențială obligatorie pentru comunicarea USB |
+| **GPIO18** | STATUS_LED | Oferă feedback vizual despre starea sistemului |
+| **GPIO19** | SD Card CS | Selectează cardul SD în arhitectura SPI shared |
+| **GPIO20** | SD Card MISO | Primește date de la memoria externă |
+| **GPIO21** | SD Card MOSI | Transmite comenzi și date către cardul SD |
+| **GPIO4** | SD Card CLK | Asigură sincronizarea transferurilor SPI către/storage |
