@@ -148,7 +148,9 @@ Acest proiect reprezintă o placă electronică (e-board) customizată, proiecta
 - Debug I²C bus
 - Extensii custom
 
-## 🔌 Mapare Pinuri ESP32-C6
+---
+
+## 🔌 Mapare Pini ESP32-C6
 
 | Pin ESP32-C6 | Componentă / Semnal | Motivul Alegerii |
 |--------------|----------------------|------------------|
