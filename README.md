@@ -12,7 +12,7 @@ Acest proiect reprezintă o placă electronică (e-board) customizată, proiecta
 |------------|-------|-----------|
 | **Microcontroler** | ESP32-C6-WROOM-1-N8 | MCU principal cu WiFi/Bluetooth LE |
 | **Ceas RTC** | DS3231SN# | Ceas în timp real cu compensare de temperatură |
-| **Senzoare** | BME680 | Senzor ambiental (temperatură, umiditate, presiune, VOC) |
+| **Senzori** | BME680 | Senzor ambiental (temperatură, umiditate, presiune, VOC) |
 | **Management Power** | BD5229G-TR + MCP73831 | Sistem complet de încărcare baterii |
 
 ## 📊 Bill of Materials (BOM)
@@ -47,3 +47,99 @@ Acest proiect reprezintă o placă electronică (e-board) customizată, proiecta
 |-----------|--------|------|
 | D1 | USBLC6-2SC6Y | [STMicro](https://www.snapeda.com/parts/USBLC6-2SC6Y/STMicroelectronics/view-part/) |
 | D3-D5 | MBR0530 | [Mouser](https://eu.mouser.com/ProductDetail/KYOCERA-AVX/SD0805S020S1R0) |
+
+## 🛠️ Descriere Hardware Detaliată
+
+### 1. Microcontroller - ESP32-C6-WROOM-1-N8
+**Specificații Avansate:**
+- **Arhitectură:** RISC-V single-core cu 160MHz (configurabil dinamic)
+- **Memorie:**
+  - 320KB SRAM intern (pentru date)
+  - 512KB ROM (pentru bootloader)
+  - 8MB Flash SPI (W25Q512JVEIQ) - stochează firmware și date utilizator
+- **Conectivitate:**
+  - **WiFi 6** (802.11ax) cu throughput de până la 300Mbps
+  - **Bluetooth 5 LE** cu support Mesh
+  - **Zigbee 3.0** pentru IoT industrial
+- **Periferice Integrate:**
+  - 4× controller SPI (inclusiv Quad-SPI)
+  - 2× I²C (software configurable)
+  - 2× UART (cu flow control hardware)
+  - 1× USB 2.0 OTG Full-Speed
+
+**Management Energie:**
+- **Moduri de operare:**
+  - Active Mode: 80mA @ 160MHz
+  - Light Sleep: 1.5mA (perif. RAM păstrate)
+  - Deep Sleep: 20µA (doar RTC activ)
+- **Feature-uri speciale:**
+  - Wake-up din Deep Sleep prin:
+    - GPIO
+    - Timer RTC
+    - UART
+    - Senzor BME680 (via interrupt)
+   
+---
+
+### 2. Sistem de Alimentare
+
+**Componente Cheie:**
+1. **MCP73831**
+   - Curent de încărcare programabil: 100-500mA
+   - Protecții integrate: Over-voltage, Reverse discharge
+   - LED indicator de stare (conectat la GPIO18)
+
+2. **BD5229G-TR**
+   - Eficiență 92% @ 500mA load
+   - Ripple voltage < 50mV
+   - Shutdown current < 1µA
+
+3. **MAX17048G+T10**
+   - Precizie măsurare: ±1% SOC
+   - Alertă baterie critică (conectat la GPIO15)
+   - Consum propriu: 7µA în mod normal
+
+---
+
+### 3. Senzori & Periferice
+
+#### 3.1 Senzor Environmental BME680
+**Interfață:** I²C @ 400kHz (adresă 0x76)  
+**Caracteristici unice:**
+- **Algoritm BSEC** pentru calcul IAQ (Indice Calitate Aer)
+- **Compensare automată** a variațiilor de temperatură
+- **Calibrare în fabrică** pentru precizie ridicată
+
+**Conexiuni:**
+| Pin BME680 | Pin ESP32 | Notă |
+|------------|-----------|------|
+| VDD        | 3.3V      | Alimentare filtrată |
+| GND        | GND       | - |
+| SDA        | GPIO1     | Cu pull-up 4.7kΩ |
+| SCL        | GPIO2     | Cu pull-up 4.7kΩ |
+
+#### 3.2 Real-Time Clock DS3231SN#
+**Precizie:** ±2ppm (echiv. ~1min/an)  
+**Backup:** Supercondensator CPH3225A (10F @ 3.3V)  
+**Funcționalități:**
+- Alarmă programabilă
+- Output square wave (1Hz-32kHz)
+- Temperatură internă compensată
+
+---
+
+### 4. Interfețe Externe
+
+#### 4.1 Port USB-C
+**Implementare:**
+- **Controler:** USB PHY integrat în ESP32-C6
+- **Protecții:**
+  - ESD: USBLC6-2SC6Y (8kV IEC61000-4-2)
+  - Current limit: Polyfuse 500mA
+
+**Funcționalități:**
+1. Încărcare baterie
+2. Serial Console (CDC-ACM)
+3. Update firmware (DFU mode)
+
+#### 4.2 Conector Qwiic
