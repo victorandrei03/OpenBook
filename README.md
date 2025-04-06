@@ -1,4 +1,4 @@
-# OpenBook
+# OpenBook - 331CC Preda Victor-Andrei
 
 ## 📋 Descriere Proiect
 Acest proiect reprezintă o placă electronică (e-board) customizată, proiectată în Autodesk Fusion 360. Include:
@@ -6,6 +6,10 @@ Acest proiect reprezintă o placă electronică (e-board) customizată, proiecta
 - Design PCB
 - Design 3D al carcasei
 - Listă completă de componente (BOM)
+
+## 🗂️ Diagrama bloc
+
+![image](https://github.com/user-attachments/assets/e04b7c41-c854-4628-ba7c-c9dfbb4d7666)
 
 ## 🛠️ Componente Cheie
 | Componentă | Model | Descriere |
